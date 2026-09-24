@@ -18,8 +18,10 @@ path = "src/lib.rs"
 # (repository-model.md): the error vocabulary and the XML reader.
 transport = { package = "xmip-core-transport", git = "https://github.com/IlleNilsson/xmip-core-transport", branch = "main" }
 # What Azure speaks rides on HTTP: the request and its answer, the
-# judgement of an answer, percent-encoding and the RFC 1123 moment.
+# judgement of an answer and the RFC 1123 moment.
 http = { package = "xmip-core-transport-http", git = "https://github.com/IlleNilsson/xmip-core-transport-http", branch = "main" }
+# Percent-encoding (RFC 3986), written once for the estate.
+net = { package = "xmip-core-library-net", git = "https://github.com/IlleNilsson/xmip-core-library-net", branch = "main" }
 # XML character data escaped, and base64, which both signatures are
 # written in.
 codec = { package = "xmip-core-library-codec", git = "https://github.com/IlleNilsson/xmip-core-library-codec", branch = "main" }
