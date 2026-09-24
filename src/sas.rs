@@ -28,7 +28,7 @@ use sha2::Sha256;
 use transport::error::{Result, protocol_error};
 
 use http::message::Request;
-use http::percent::{decode, encode};
+use net::percent::{decode, encode};
 
 /// How long a token a Location makes stays good: five minutes, long enough
 /// for a request and short enough that a token read in transit is soon
