@@ -1,42 +1,34 @@
-# Xmip repository template — Rust
+# xmip-core-transport-azure
 
-This repository is the starter snapshot for a Rust Xmip module repository. It is
-not an Xmip runtime capability.
+What every Azure technology speaks over HTTP: the Shared Access Signature and
+Shared Key, both sides of each, and what a `servicebus.windows.net` namespace
+answers when it refuses. Not a transport of its own:
+[azure-blob](https://github.com/IlleNilsson/xmip-core-transport-azure-blob),
+[azure-service-bus](https://github.com/IlleNilsson/xmip-core-transport-azure-service-bus)
+and
+[azure-event-hubs](https://github.com/IlleNilsson/xmip-core-transport-azure-event-hubs)
+ride on it, and it rides on
+[xmip-core-transport-http](https://github.com/IlleNilsson/xmip-core-transport-http).
+A technology of
+[xmip-core-transport](https://github.com/IlleNilsson/xmip-core-transport).
 
-For a .NET 11 surface — the CLI, the PowerShell module, the MAUI desktop GUI or
-the Blazor web GUI — use
-[xmip-template-dotnet](https://github.com/IlleNilsson/xmip-template-dotnet)
-instead. ADR-0014: every user-interfacing module is .NET 11, and
-`xmip-core-abi` is the exception.
+| module | what |
+| --- | --- |
+| `sas` | the Shared Access Signature, for azure-service-bus and azure-event-hubs |
+| `shared_key` | Shared Key, for azure-blob |
+| `namespace` | a namespace's refusal and its subcode, for the same two as `sas` |
 
-A repository generated from this template has independent history. Later
-template changes do not automatically rewrite generated repositories.
-
-## Before implementation
-
-Follow [TEMPLATE_SETUP.md](TEMPLATE_SETUP.md), and item 3 first. The new
-repository must be classified and declared in the authoritative Xmip
-architecture manifest before its responsibility or dependencies are treated as
-accepted architecture.
+Created 2026-09-24 on the owner's ruling of 2026-09-22: what one vendor speaks
+leaves the http technology for a crate of that vendor's. The signature and the
+namespace's answers lived in http from 2026-09-14, and Shared Key in
+azure-blob (ADR-0044, amendment 2026-09-24).
 
 ## Toolchain
 
-`rust-toolchain.toml` pins the toolchain for the whole estate. rustup reads it
-automatically and installs what is missing. Do not change it here — raising it
-is one deliberate change across every repository.
-
-## Shared governance
-
-Repository-specific licensing remains explicit in [LICENSE](LICENSE).
-Contribution, security, support, issue and pull-request defaults are inherited
-from [IlleNilsson/.github](https://github.com/IlleNilsson/.github) when they are
-not overridden locally.
+`rust-toolchain.toml` pins the toolchain for the whole estate. Do not change it
+here.
 
 ## Verification
 
 The included workflow is manual-only and calls the versioned shared workflow at
-`IlleNilsson/.github@v1`. It does not run on pushes, pull requests or a
-schedule.
-
-The ordered stages are formatting, semantic analysis, linting, compilation and
-linking, and test execution. Packaging and publishing are not configured.
+`IlleNilsson/.github@v1`.
