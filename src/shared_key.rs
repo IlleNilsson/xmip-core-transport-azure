@@ -27,7 +27,7 @@ use sha2::Sha256;
 use transport::error::{Result, protocol_error};
 
 use http::date::rfc1123;
-use http::message::Request;
+use net::http::Request;
 
 /// The service version every request names.
 pub const VERSION: &str = "2021-08-06";
