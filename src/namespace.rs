@@ -14,7 +14,8 @@ use codec::xml::escape;
 use transport::error::Result;
 use transport::xml::first;
 
-use http::message::{self, Response};
+use http::status;
+use net::http::Response;
 
 /// The far end's answer that is not a result: an `Error` with `status` for
 /// its code and `detail` for what went wrong, `40103: Invalid authorization
@@ -48,7 +49,7 @@ pub fn subcode(detail: &str) -> String {
 /// # Errors
 /// Where the status is not 2xx.
 pub fn judge(service: &str, response: Response) -> Result<Response> {
-    message::judge(
+    status::judge(
         service,
         response,
         |answer| {
