@@ -53,9 +53,10 @@ pub fn judge(service: &str, response: Response) -> Result<Response> {
         service,
         response,
         |answer| {
-            first(&answer.text(), "Detail")
+            answer
+                .text()
                 .ok()
-                .flatten()
+                .and_then(|xml| first(xml, "Detail").ok().flatten())
                 .unwrap_or_default()
         },
         |detail| detail.starts_with("50002"),
@@ -83,7 +84,7 @@ mod tests {
             busy.header_value("content-type"),
             Some("application/xml; charset=utf-8")
         );
-        assert!(busy.text().contains("busy &lt;now&gt;"));
+        assert!(busy.text().expect("text").contains("busy &lt;now&gt;"));
         assert!(judge("Service Bus", busy).expect_err("busy").retryable);
         let denied = judge(
             "Event Hubs",
