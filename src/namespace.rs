@@ -12,7 +12,6 @@
 
 use codec::xml::escape;
 use transport::error::Result;
-use transport::xml::first;
 
 use http::status;
 use net::http::Response;
@@ -56,7 +55,7 @@ pub fn judge(service: &str, response: Response) -> Result<Response> {
             answer
                 .text()
                 .ok()
-                .and_then(|xml| first(xml, "Detail").ok().flatten())
+                .and_then(|xml| codec::xml::text(xml, "Detail").ok().flatten())
                 .unwrap_or_default()
         },
         |detail| detail.starts_with("50002"),

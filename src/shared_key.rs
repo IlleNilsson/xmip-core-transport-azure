@@ -22,12 +22,12 @@ use std::fmt::Write as _;
 use std::time::SystemTime;
 
 use codec::base64;
-use hmac::{Hmac, Mac};
+use hmac::{Hmac, KeyInit, Mac};
 use sha2::Sha256;
 use transport::error::{Result, protocol_error};
 
-use http::date::rfc1123;
 use net::http::Request;
+use net::http::date::rfc1123;
 
 /// The service version every request names.
 pub const VERSION: &str = "2021-08-06";
@@ -123,7 +123,7 @@ impl Signer {
 /// `Content-Length` is the body's length and empty where the body is empty,
 /// as versions from 2015-02-21 have it.
 #[must_use]
-pub fn string_to_sign(account: &str, request: &Request) -> String {
+fn string_to_sign(account: &str, request: &Request) -> String {
     let mut lines = vec![request.method.clone()];
     for name in STANDARD_HEADERS {
         lines.push(if name == "content-length" {
