@@ -23,12 +23,13 @@
 use std::time::{SystemTime, UNIX_EPOCH};
 
 use codec::base64;
-use hmac::{Hmac, Mac};
+use hmac::{Hmac, KeyInit, Mac};
 use sha2::Sha256;
 use transport::error::{Result, protocol_error};
 
+use net::Target;
 use net::http::Request;
-use net::percent::{decode, encode};
+use net::percent::{decode_pairs, encode};
 
 /// How long a token a Location makes stays good: five minutes, long enough
 /// for a request and short enough that a token read in transit is soon
@@ -53,6 +54,25 @@ pub struct Token {
     /// The policy whose key made it.
     pub policy: String,
     signature: String,
+}
+
+impl Token {
+    /// The scheme and authority of the resource, which is the namespace
+    /// it lives in: `https://ns.servicebus.windows.net`; the resource
+    /// whole where it is not a URL.
+    #[must_use]
+    pub fn namespace(&self) -> &str {
+        Target::parse(&self.resource).map_or(&self.resource, |resource| resource.root())
+    }
+
+    /// The path the token covers under its namespace, opening with `/`.
+    #[must_use]
+    pub fn path(&self) -> &str {
+        match &self.resource[self.namespace().len()..] {
+            "" => "/",
+            path => path,
+        }
+    }
 }
 
 impl Signer {
@@ -105,12 +125,7 @@ impl Signer {
         if token.expiry <= now {
             return Err(protocol_error("40102: Expired authorization token"));
         }
-        let path = token
-            .resource
-            .split_once("://")
-            .and_then(|(_, rest)| rest.find('/').map(|at| &rest[at..]))
-            .unwrap_or("/");
-        if !request.path.starts_with(path) {
+        if !request.path.starts_with(token.path()) {
             return Err(protocol_error(
                 "40103: Invalid authorization token signature — another resource",
             ));
@@ -152,13 +167,12 @@ pub fn parse(authorization: &str) -> Result<Token> {
         policy: String::new(),
         signature: String::new(),
     };
-    for pair in fields.split('&') {
-        let (name, value) = pair.split_once('=').ok_or_else(malformed)?;
-        match name {
-            "sr" => token.resource = decode(value),
-            "sig" => token.signature = decode(value),
+    for (name, value) in decode_pairs(fields) {
+        match name.as_str() {
+            "sr" => token.resource = value,
+            "sig" => token.signature = value,
             "se" => token.expiry = value.parse().map_err(|_| malformed())?,
-            "skn" => token.policy = value.to_string(),
+            "skn" => token.policy = value,
             _ => return Err(malformed()),
         }
     }

@@ -29,8 +29,8 @@ codec = { package = "xmip-core-library-codec", git = "https://github.com/IlleNil
 
 # Both signatures are HMAC-SHA256 written as base64; the HMAC's own check is
 # the constant-time comparison. Pure Rust and small.
-sha2 = "0.10"
-hmac = "0.12"
+sha2 = "0.11"
+hmac = "0.13"
 
 [dev-dependencies]
 
