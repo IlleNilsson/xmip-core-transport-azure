@@ -1,5 +1,5 @@
 //! What a `servicebus.windows.net` namespace answers when it refuses, and
-//! the judgement of what it answers.
+//! the judgment of what it answers.
 //!
 //! An error is an XML `Error` with a `Code` that repeats the status and a
 //! `Detail` that says what went wrong, its leading subcode the part worth
