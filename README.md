@@ -23,7 +23,7 @@ leaves the http technology for a crate of that vendor's. The signature and the
 namespace's answers lived in http from 2026-09-14, and Shared Key in
 azure-blob (ADR-0044, amendment 2026-09-24).
 
-A token's resource is read by `net::Target`: `Token::namespace` is the scheme and authority it lives under and `Token::path` the path it covers, which Service Bus and Event Hubs name their origins with; until 2026-09-28 each of the two cut it by hand, and so did the verifier. The token's fields are read by `net::percent::decode_pairs`, and the RFC 1123 date by `net::http::date`, which the http transport held until the same day.
+A token's resource is read by `net::Target`: `Token::namespace` is the scheme and authority it lives under and `Token::path` the path it covers, which Service Bus and Event Hubs name their origins with; until 2026-09-28 each of the two cut it by hand, and so did the verifier. The token's fields are read by `codec::percent::decode_pairs`, and the RFC 1123 date by `net::http::date`, which the http transport held until the same day.
 
 ## Toolchain
 
