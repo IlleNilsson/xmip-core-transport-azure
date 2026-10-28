@@ -27,9 +27,9 @@ use hmac::{Hmac, KeyInit, Mac};
 use sha2::Sha256;
 use transport::error::{Result, protocol_error};
 
+use codec::percent::{decode_pairs, encode};
 use net::Target;
 use net::http::Request;
-use net::percent::{decode_pairs, encode};
 
 /// How long a token a Location makes stays good: five minutes, long enough
 /// for a request and short enough that a token read in transit is soon
