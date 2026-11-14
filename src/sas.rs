@@ -23,8 +23,7 @@
 use std::time::{SystemTime, UNIX_EPOCH};
 
 use codec::base64;
-use hmac::{Hmac, KeyInit, Mac};
-use sha2::Sha256;
+use codec::digest::HmacSha256;
 use transport::error::{Result, protocol_error};
 
 use codec::percent::{decode_pairs, encode};
@@ -132,21 +131,23 @@ impl Signer {
         }
         let differs = || protocol_error("40103: Invalid authorization token signature");
         let given = base64::decode(&token.signature).map_err(|_| differs())?;
-        self.mac(&encode(&token.resource, false), token.expiry)
-            .verify_slice(&given)
-            .map_err(|_| differs())?;
+        if !self
+            .mac(&encode(&token.resource, false), token.expiry)
+            .verify(&given)
+        {
+            return Err(differs());
+        }
         Ok(token)
     }
 
     fn signature(&self, encoded_resource: &str, expiry: u64) -> String {
-        base64::encode(&self.mac(encoded_resource, expiry).finalize().into_bytes())
+        base64::encode(&self.mac(encoded_resource, expiry).finish())
     }
 
-    /// The HMAC under the policy's key: finalized it is the signature, and
+    /// The HMAC under the policy's key: finished it is the signature, and
     /// its check compares one in constant time.
-    fn mac(&self, encoded_resource: &str, expiry: u64) -> Hmac<Sha256> {
-        let mut mac =
-            Hmac::<Sha256>::new_from_slice(&self.key).expect("HMAC takes a key of any length");
+    fn mac(&self, encoded_resource: &str, expiry: u64) -> HmacSha256 {
+        let mut mac = HmacSha256::new(&self.key);
         mac.update(format!("{encoded_resource}\n{expiry}").as_bytes());
         mac
     }

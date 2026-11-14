@@ -22,8 +22,7 @@ use std::fmt::Write as _;
 use std::time::SystemTime;
 
 use codec::base64;
-use hmac::{Hmac, KeyInit, Mac};
-use sha2::Sha256;
+use codec::digest::HmacSha256;
 use transport::error::{Result, protocol_error};
 
 use net::http::Request;
@@ -98,20 +97,23 @@ impl Signer {
             .map(|(_, signature)| signature)
             .ok_or_else(differs)?;
         let given = base64::decode(signature).map_err(|_| differs())?;
-        self.mac(&string_to_sign(&self.account, request))
-            .verify_slice(&given)
-            .map_err(|_| differs())
+        if self
+            .mac(&string_to_sign(&self.account, request))
+            .verify(&given)
+        {
+            return Ok(());
+        }
+        Err(differs())
     }
 
     fn signature(&self, to_sign: &str) -> String {
-        base64::encode(&self.mac(to_sign).finalize().into_bytes())
+        base64::encode(&self.mac(to_sign).finish())
     }
 
-    /// The HMAC under the account key: finalized it is the signature, and
+    /// The HMAC under the account key: finished it is the signature, and
     /// its check compares one in constant time.
-    fn mac(&self, to_sign: &str) -> Hmac<Sha256> {
-        let mut mac =
-            Hmac::<Sha256>::new_from_slice(&self.key).expect("HMAC takes a key of any length");
+    fn mac(&self, to_sign: &str) -> HmacSha256 {
+        let mut mac = HmacSha256::new(&self.key);
         mac.update(to_sign.as_bytes());
         mac
     }

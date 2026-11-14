@@ -23,14 +23,10 @@ http = { package = "xmip-core-transport-http", git = "https://github.com/IlleNil
 # Percent-encoding (RFC 3986), written once for the estate, and the
 # request and answer the signers and the namespace form (`net::http`).
 net = { package = "xmip-core-library-net", git = "https://github.com/IlleNilsson/xmip-core-library-net", branch = "main" }
-# XML character data escaped, and base64, which both signatures are
-# written in.
+# XML character data escaped, both signatures, HMAC-SHA256 checked in
+# constant time (codec::digest), and base64, which they are written in.
 codec = { package = "xmip-core-library-codec", git = "https://github.com/IlleNilsson/xmip-core-library-codec", branch = "main" }
 
-# Both signatures are HMAC-SHA256 written as base64; the HMAC's own check is
-# the constant-time comparison. Pure Rust and small.
-sha2 = "0.11"
-hmac = "0.13"
 
 [dev-dependencies]
 
