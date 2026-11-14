@@ -19,11 +19,11 @@
 //! The `tls` feature is the answer to that, not a stronger signature.
 
 use std::fmt::Write as _;
-use std::time::SystemTime;
 
 use codec::base64;
 use codec::digest::HmacSha256;
 use transport::error::{Result, protocol_error};
+use xcore::{Clock, SystemClock};
 
 use net::http::Request;
 use net::http::date::rfc1123;
@@ -163,10 +163,11 @@ fn string_to_sign(account: &str, request: &Request) -> String {
 }
 
 /// The moment now, as `x-ms-date` writes it: `Tue, 08 Sep 2026 12:00:00 GMT`
-/// — RFC 1123, which is the http technology's to write (ADR-0044).
+/// — RFC 1123, which is HTTP's to write (`net::http::date`, ADR-0044), the
+/// seconds read off the one clock (`xcore::Clock`).
 #[must_use]
 pub fn now() -> String {
-    rfc1123(SystemTime::now())
+    rfc1123(SystemClock.unix_seconds())
 }
 
 #[cfg(test)]
