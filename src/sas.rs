@@ -20,11 +20,10 @@
 //! request at its resource until it expires. The `tls` feature is what
 //! keeps a token and the message it carries from being read on the way.
 
-use std::time::{SystemTime, UNIX_EPOCH};
-
 use codec::base64;
 use codec::digest::HmacSha256;
 use transport::error::{Result, protocol_error};
+use xcore::{Clock, SystemClock};
 
 use codec::percent::{decode_pairs, encode};
 use net::Target;
@@ -183,12 +182,11 @@ pub fn parse(authorization: &str) -> Result<Token> {
     Ok(token)
 }
 
-/// The moment now, in seconds since the epoch, which is how `se` counts.
+/// The moment now, in seconds since the epoch, which is how `se` counts:
+/// the one clock's (`xcore::Clock`).
 #[must_use]
 pub fn now() -> u64 {
-    SystemTime::now()
-        .duration_since(UNIX_EPOCH)
-        .map_or(0, |since| since.as_secs())
+    u64::try_from(SystemClock.unix_seconds()).unwrap_or(0)
 }
 
 #[cfg(test)]
