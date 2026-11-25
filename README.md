@@ -15,6 +15,7 @@ A technology of
 | module | what |
 | --- | --- |
 | `sas` | the Shared Access Signature, for azure-service-bus and azure-event-hubs |
+| `key_name` | the `key_name` setting, the shared access policy a Location signs under, and its secret, for the same two |
 | `shared_key` | Shared Key, for azure-blob |
 | `namespace` | a namespace's refusal and its subcode, for the same two as `sas` |
 

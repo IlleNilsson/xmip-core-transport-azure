@@ -7,6 +7,8 @@
 //! ```text
 //! sas.rs         the Shared Access Signature, both sides, for
 //!                azure-service-bus and azure-event-hubs
+//! key_name.rs    the shared access policy a Location signs under, and its
+//!                secret, for the same two
 //! shared_key.rs  Shared Key, both sides, for azure-blob
 //! namespace.rs   what a servicebus.windows.net namespace answers when it
 //!                refuses, for azure-service-bus and azure-event-hubs
@@ -19,6 +21,7 @@
 //! vendor's: http keeps HTTP, and a technology riding on Azure depends on
 //! this crate, never on a sibling (ADR-0044).
 
+pub mod key_name;
 pub mod namespace;
 pub mod sas;
 pub mod shared_key;
