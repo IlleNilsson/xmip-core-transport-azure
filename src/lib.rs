@@ -20,8 +20,17 @@
 //! 2026-09-22 that what one vendor speaks leaves HTTP for a crate of that
 //! vendor's: http keeps HTTP, and a technology riding on Azure depends on
 //! this crate, never on a sibling (ADR-0044).
+//!
+//! Built with its `declaration` feature alone, the crate is the setting
+//! azure-service-bus and azure-event-hubs declare, `key_name::key_name`,
+//! and none of the code, which is behind the default feature (ADR-0064,
+//! amendment 2026-11-26).
 
+#[cfg(feature = "declaration")]
 pub mod key_name;
+#[cfg(feature = "default")]
 pub mod namespace;
+#[cfg(feature = "default")]
 pub mod sas;
+#[cfg(feature = "default")]
 pub mod shared_key;

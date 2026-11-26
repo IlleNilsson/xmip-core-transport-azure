@@ -26,6 +26,10 @@ azure-blob (ADR-0044, amendment 2026-09-24).
 
 A token's resource is read by `net::Target`: `Token::namespace` is the scheme and authority it lives under and `Token::path` the path it covers, which Service Bus and Event Hubs name their origins with; until 2026-09-28 each of the two cut it by hand, and so did the verifier. The token's fields are read by `codec::percent::decode_pairs`, and the RFC 1123 date by `net::http::date`, which the http transport held until the same day.
 
+## The declaration
+
+The setting azure-service-bus and azure-event-hubs declare, `key_name`, is a `const` here, `key_name::KEY_NAME` and `key_name::key_name` (ADR-0064, amendment 2026-11-26). Built with its `declaration` feature alone (`--no-default-features --features declaration`), the crate is that and nothing more: `key_name::signing_as`, both signatures, a namespace's refusal and every crate they are built on — the http technology, and with it TLS — are behind the default feature. A technology's own declaration takes it so, azure-event-hubs' since 2026-11-26, for the library the surfaces load to carry once the gathering crate of open problem 48 links it. `test/Declaration.Test.ps1` in the estate holds that the declaration builds nothing the transport capability does not.
+
 ## Toolchain
 
 `rust-toolchain.toml` pins the toolchain for the whole estate. Do not change it

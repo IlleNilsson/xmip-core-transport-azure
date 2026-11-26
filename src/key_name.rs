@@ -5,8 +5,14 @@
 //! kept in the Administration Database and read at each request
 //! (`transport::secured::presented`), since a signature is made for every
 //! request.
+//!
+//! [`KEY_NAME`] and [`key_name`] are the declaration, built with the
+//! `declaration` feature alone; `signing_as` is code, behind the default
+//! feature.
 
+#[cfg(feature = "default")]
 use transport::Secured;
+#[cfg(feature = "default")]
 use transport::error::Result;
 use xcore::settings::{Applies, Kind, Presence, Setting};
 
@@ -36,6 +42,7 @@ pub const fn key_name(applies: Applies) -> Setting {
 ///
 /// # Errors
 /// Permanent, in words, where `policy` is empty.
+#[cfg(feature = "default")]
 pub fn signing_as(policy: &str, secured: Secured) -> Result<Secured> {
     if policy.is_empty() {
         return Err(transport::secured::without_holder(
