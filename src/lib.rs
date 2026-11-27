@@ -22,9 +22,9 @@
 //! this crate, never on a sibling (ADR-0044).
 //!
 //! Built with its `declaration` feature alone, the crate is the setting
-//! azure-service-bus and azure-event-hubs declare, `key_name::key_name`,
-//! and none of the code, which is behind the default feature (ADR-0064,
-//! amendment 2026-11-26).
+//! azure-service-bus and azure-event-hubs declare, `key_name::key_name`: the
+//! transport guide's "The declaration",
+//! `module/core/capability/transport/doc/adding-a-transport.md`.
 
 #[cfg(feature = "declaration")]
 pub mod key_name;

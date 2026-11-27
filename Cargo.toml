@@ -31,14 +31,12 @@ xcore = { package = "xmip-core", git = "https://github.com/IlleNilsson/xmip-core
 [dev-dependencies]
 
 [features]
-# What Azure speaks and everything it is built on, and the declaration.
-# Without it the crate is the declaration alone (ADR-0064, amendments
-# 2026-10-22 and 2026-11-26).
+# What Azure speaks, and the declaration: the transport guide's "The
+# declaration", module/core/capability/transport/doc/adding-a-transport.md.
 default = ["declaration", "dep:transport", "dep:http", "dep:net", "dep:codec"]
 # The declaration alone: the setting azure-service-bus and azure-event-hubs
-# declare, `key_name` (`key_name::key_name`), and none of the code — what a
-# technology's own declaration takes, and the surfaces' library is to
-# carry (open problem 48).
+# declare, `key_name` (`key_name::key_name`), which a technology's own
+# declaration takes.
 declaration = []
 
 [lints.rust]
