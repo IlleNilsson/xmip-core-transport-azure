@@ -30,11 +30,6 @@ A token's resource is read by `net::Target`: `Token::namespace` is the scheme an
 
 The setting azure-service-bus and azure-event-hubs declare, `key_name`, is a `const` here, `key_name::KEY_NAME` and `key_name::key_name` (ADR-0064, amendment 2026-11-26). Built with its `declaration` feature alone (`--no-default-features --features declaration`), the crate is that and nothing more: `key_name::signing_as`, both signatures, a namespace's refusal and every crate they are built on — the http technology, and with it TLS — are behind the default feature. A technology's own declaration takes it so, azure-event-hubs' and azure-service-bus' since 2026-11-26, and the library the surfaces load carries it through the gathering crate xmip-core-declaration (open problem 48). `test/Declaration.Test.ps1` in the estate holds that the declaration builds nothing the transport capability does not.
 
-## Toolchain
-
-`rust-toolchain.toml` pins the toolchain for the whole estate. Do not change it
-here.
-
 ## Verification
 
 The included workflow is manual-only and calls the versioned shared workflow at
